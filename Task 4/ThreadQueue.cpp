@@ -3,7 +3,7 @@
 #include <condition_variable>
 #pragma once
 template <typename T>
-class ThreadSafeQueue
+class ThreadQueue
 {
 private:
     std::queue<std::unique_ptr<T> > queue;
@@ -21,7 +21,7 @@ public:
 };
 
 template <typename T>
-void ThreadSafeQueue<T>::Push(std::unique_ptr<T> job)
+void ThreadQueue<T>::Push(std::unique_ptr<T> job)
 {
     std::unique_lock<std::mutex> guard(lock);
     queue.emplace(std::move(job));
@@ -31,7 +31,7 @@ void ThreadSafeQueue<T>::Push(std::unique_ptr<T> job)
 }
 
 template <typename T>
-std::unique_ptr<T> ThreadSafeQueue<T>::Pop()
+std::unique_ptr<T> ThreadQueue<T>::Pop()
 {
     std::unique_lock<std::mutex> guard(lock);
     cond.wait(guard, [&]()
@@ -47,7 +47,7 @@ std::unique_ptr<T> ThreadSafeQueue<T>::Pop()
 }
 
 template <typename T>
-void ThreadSafeQueue<T>::Stop()
+void ThreadQueue<T>::Stop()
 {
     std::unique_lock<std::mutex> guard(lock);
     stop = true;
@@ -55,7 +55,7 @@ void ThreadSafeQueue<T>::Stop()
 }
 
 template <typename T>
-void ThreadSafeQueue<T>::CompleteJob()
+void ThreadQueue<T>::CompleteJob()
 {
     std::unique_lock<std::mutex> guard(lock);
     completedJobs++;

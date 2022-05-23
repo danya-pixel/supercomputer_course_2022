@@ -1,18 +1,18 @@
 #include <thread>
-#include "ThreadSafeQueue.cpp"
+#include "ThreadQueue.cpp"
 #include "RetraceJob.cpp"
 #pragma once
-class ThreadPool
+class Pool
 {
 private:
     size_t PoolSize = 1;
-    ThreadSafeQueue<RetraceJob> queue;
+    ThreadQueue<RetraceJob> queue;
     std::vector<std::thread *> workers;
 
 public:
-    ThreadPool() = default;
+    Pool() = default;
 
-    explicit ThreadPool(size_t poolSize);
+    explicit Pool(size_t poolSize);
 
     void ThreadFunc();
 
@@ -21,12 +21,12 @@ public:
     void Join();
 };
 
-ThreadPool::ThreadPool(size_t poolSize) : PoolSize(poolSize)
+Pool::Pool(size_t poolSize) : PoolSize(poolSize)
 {
     this->workers.reserve(poolSize);
 }
 
-void ThreadPool::ThreadFunc()
+void Pool::ThreadFunc()
 {
     std::unique_ptr<RetraceJob> a = std::move(queue.Pop());
     while (a != nullptr)
@@ -37,12 +37,12 @@ void ThreadPool::ThreadFunc()
     }
 }
 
-void ThreadPool::AddJob(std::unique_ptr<RetraceJob> job)
+void Pool::AddJob(std::unique_ptr<RetraceJob> job)
 {
     queue.Push(std::move(job));
 }
 
-void ThreadPool::Join()
+void Pool::Join()
 {
     for (size_t i = 0; i < this->PoolSize; i++)
     {

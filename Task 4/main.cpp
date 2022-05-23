@@ -2,7 +2,7 @@
 #include <chrono>
 #include <mutex>
 #include <thread>
-#include "ThreadPool.cpp"
+#include "Pool.cpp"
 
 void initScene(Scene &scene)
 {

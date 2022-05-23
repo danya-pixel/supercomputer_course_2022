@@ -2,15 +2,6 @@
 #pragma once
 using namespace minirt;
 
-class IJob
-{
-
-public:
-    virtual ~IJob() = default;
-
-    virtual void Execute() = 0;
-};
-
 struct Point
 {
     int x;
@@ -19,7 +10,7 @@ struct Point
     Point(int x, int y) : x(x), y(y) {}
 };
 
-class RetraceJob : public IJob
+class RetraceJob
 {
 private:
     Scene &scene;
@@ -33,7 +24,6 @@ public:
 
     void Execute() override;
 };
-
 
 void PixelTask(const Scene &scene, Image &image, ViewPlane &viewPlane, Point point, size_t numOfSamples)
 {
