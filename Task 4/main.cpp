@@ -50,9 +50,9 @@ void initScene(Scene &scene)
 int main(int argc, char **argv)
 {
     int num_threads = (argc > 1 ? std::stoi(argv[1]) : 1);
-    int viewPlaneResolutionX = 1920;
+    int viewPlaneResolutionX = 720;
     int viewPlaneResolutionY = 1080;
-    int numOfSamples = 10;
+    int numSamples = 5;
     Scene scene;
     initScene(scene);
 
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
         for (int y = 0; y < viewPlaneResolutionY; y++)
         {
             Point cur = Point(x, y);
-            pool.AddJob(std::make_unique<RetraceJob>(scene, image, viewPlane, cur, numOfSamples));
+            pool.AddJob(std::make_unique<RetraceJob>(scene, image, viewPlane, cur, numSamples));
         }
     }
     auto start = std::chrono::high_resolution_clock::now();
