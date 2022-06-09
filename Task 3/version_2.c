@@ -7,7 +7,7 @@
 
 int *sended_size, *started_positions, *part_of_rows, *number_of_full_rows;
 int cntOfProcesses, rank;
-const double epsilon = 0,00001;
+const double epsilon = 0.00001;
 
 double *matrix_multiplication(double *part_of_matrix, const double *x, int N)
 {
